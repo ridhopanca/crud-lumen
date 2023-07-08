@@ -140,11 +140,9 @@ class ItemsController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'id' => 'required',
-                'name' => ['required','unique:items,id,'.$request->id],
-                'image' => 'required',
+                'name' => ['required','unique:items,name,'.$request->id],
                 'sell_price' => 'required',
                 'buy_price' => 'required',
-                'quantity'=> 'required'
             ],[
                 'id' => 'required',
                 'name.required' => 'Name field is required',
@@ -152,7 +150,6 @@ class ItemsController extends Controller
                 'sell_price.required' => 'Sell price field is required',
                 'buy_price.required' => 'Buy price field is required',
                 'quantity.required' => 'Quantity field is required',
-                'image.required' => 'Image field is required',
             ]);
             if($validator->fails()){
                 return $this->failedValidation(422, 'Unprocessable Requests', $validator->errors());
