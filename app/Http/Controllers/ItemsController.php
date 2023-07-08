@@ -69,11 +69,15 @@ class ItemsController extends Controller
             if($validator->fails()){
                 return $this->failedValidation(422, 'Unprocessable Requests', $validator->errors());
             }
+            $sellPrice = str_replace(',','',$request->sell_price);
+            $buyPrice = str_replace(',','',$request->buy_price);
+            $quantity = str_replace(',','',$request->quantity);
+
             $items = new Item();
             $items->name = trim($request->name);
-            $items->sell_price = floatval(trim($request->sell_price));
-            $items->buy_price = floatval(trim($request->buy_price));
-            $items->quantity = floatval(trim($request->quantity));
+            $items->sell_price = floatval(trim($sellPrice));
+            $items->buy_price = floatval(trim($buyPrice));
+            $items->quantity = floatval(trim($quantity));
             if($request->file('image')){
                 $file = $request->file('image');
                 $md5file = md5_file($file->getRealPath());
@@ -162,10 +166,13 @@ class ItemsController extends Controller
                 ];
                 return response()->json($responseData,404);
             }
+            $sellPrice = str_replace(',','',$request->sell_price);
+            $buyPrice = str_replace(',','',$request->buy_price);
+            $quantity = str_replace(',','',$request->quantity);
             $items->name = trim($request->name);
-            $items->sell_price = floatval(trim($request->sell_price));
-            $items->buy_price = floatval(trim($request->buy_price));
-            $items->quantity = floatval(trim($request->quantity));
+            $items->sell_price = floatval(trim($sellPrice));
+            $items->buy_price = floatval(trim($buyPrice));
+            $items->quantity = floatval(trim($quantity));
             if($request->file('image')){
                 $file = $request->file('image');
                 $md5file = md5_file($file->getRealPath());
