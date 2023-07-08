@@ -15,13 +15,19 @@ class ItemsController extends Controller
             $dataRequest = json_decode($request->getContent(), true) ? json_decode($request->getContent(), true) : [];
             $limit = isset($dataRequest['limit']) ? $dataRequest['limit'] : '';
             $search = isset($dataRequest['search']) ? $dataRequest['search'] : '';
+            $sorting = isset($dataRequest['sorting']) ? $dataRequest['sorting'] : '';
             $items = Item::when($search != '', function($q) use($search) {
                         return $q->where('name','like','%'.trim($search).'%');
+                    })
+                    ->when($sorting != '', function($q) use($sorting){
+                        $direction = $sorting['desc'] ? 'desc' : 'asc';
+                        $column = $sorting['id'] ? $sorting['id'] : 'name';
+                        return $q->orderBy($column, $direction);
                     });
             if($limit != ''){
-                $items = $items->orderBy('name')->paginate($limit);
+                $items = $items->paginate($limit);
             } else {
-                $items = $items->orderBy('name')->get()->toArray();
+                $items = $items->get()->toArray();
             }
 
             if(sizeof($items) < 1){
